@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Cormorant+SC:wght@400&family=Pinyon+Script&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(96.5% 0.012 90);
+  --foreground: oklch(38% 0.03 140);
+  --card: oklch(97% 0.008 90);
+  --card-foreground: oklch(35% 0.03 140);
+  --primary: oklch(36% 0.05 145);
+  --primary-foreground: oklch(97% 0.01 90);
+  --secondary: oklch(92% 0.015 90);
+  --muted: oklch(92% 0.012 90);
+  --muted-foreground: oklch(55% 0.03 130);
+  --accent: oklch(55% 0.06 140);
+  --border: oklch(85% 0.02 100);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Cormorant Garamond', serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.script-title {
+  font-family: 'Pinyon Script', cursive;
+  letter-spacing: 0.01em;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+@keyframes hero-pan {
+  0% { transform: scale(1.08) translate(0, 0); }
+  50% { transform: scale(1.15) translate(-1%, -1%); }
+  100% { transform: scale(1.08) translate(0, 0); }
+}
+.animate-hero-pan {
+  animation: hero-pan 24s ease-in-out infinite;
+}
+
+/* The tied bow sways gently as one piece before it's opened — applied to
+   both clipped halves identically so the seam between them stays invisible. */
+@keyframes bow-idle-sway {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+.animate-bow-idle-half {
+  animation: bow-idle-sway 3.2s ease-in-out infinite;
+  transform-origin: 50% 32%;
+}
+
+/* Phase 1: the knot droops (tension releasing), then each tail sweeps off
+   its own side, accelerating out — ease-in, like something being pulled. */
+@keyframes bow-untie-left {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  18% { transform: translateY(5px) rotate(-1.5deg) scaleY(1.03); opacity: 1; }
+  100% { transform: translateX(-140%) translateY(26px) rotate(-18deg); opacity: 0; }
+}
+@keyframes bow-untie-right {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  18% { transform: translateY(5px) rotate(1.5deg) scaleY(1.03); opacity: 1; }
+  100% { transform: translateX(140%) translateY(26px) rotate(18deg); opacity: 0; }
+}
+
+@keyframes hero-mote {
+  0% { transform: translate(0, 0); opacity: 0; }
+  10% { opacity: 0.55; }
+  50% { transform: translate(10px, -45vh); }
+  90% { opacity: 0.3; }
+  100% { transform: translate(-6px, -92vh); opacity: 0; }
+}
+.animate-hero-mote {
+  animation-name: hero-mote;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
