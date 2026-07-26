@@ -1,0 +1,13 @@
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
+# Vercel
+.vercel
+
+# Editor/OS
+.DS_Store
