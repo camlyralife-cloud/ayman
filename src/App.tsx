@@ -139,30 +139,37 @@ const HERO_TEXT_SHADOW = '0 1px 14px rgba(255,240,244,0.9), 0 1px 2px rgba(255,2
 function HeroCopy({ opened }: { opened: boolean }) {
   return (
     <div className="pointer-events-auto max-w-md text-center px-6" style={{ color: HERO_TEXT_COLOR, textShadow: HERO_TEXT_SHADOW }}>
-      <Reveal opened={opened} index={0} dim={0.92} className="font-serif-sc font-semibold text-sm tracking-[0.4em]">
-        ✦ A &amp; S ✦
+      <Reveal opened={opened} index={0} dim={0.9} className="flex justify-center">
+        <span
+          className="flex h-14 w-14 items-center justify-center rounded-full font-serif-sc text-sm tracking-[0.15em]"
+          style={{ border: '1px solid currentColor', opacity: 0.9 }}
+        >
+          A&amp;S
+        </span>
       </Reveal>
-      <Reveal opened={opened} index={1}>
-        <p className="script-title mt-4 text-5xl md:text-7xl leading-[1]">Ayman</p>
-        <p className="script-title text-3xl md:text-4xl leading-[1.2] my-2" style={{ opacity: 0.85 }}>&</p>
-        <p className="script-title text-5xl md:text-7xl leading-[1]">Sahar</p>
+      <Reveal opened={opened} index={1} className="script-title mt-5 text-4xl md:text-6xl leading-[1.15]">
+        Ayman &amp; Sahar
       </Reveal>
       <Reveal opened={opened} index={2} dim={0.88} className="mt-6 font-serif-sc font-semibold text-xs tracking-[0.2em] uppercase leading-relaxed">
         We request the pleasure of your company
       </Reveal>
       <Reveal opened={opened} index={3} dim={0.88} className="font-serif-sc font-semibold text-xs tracking-[0.2em] uppercase leading-relaxed">
-        as they exchange vows
+        to celebrate our Nikah on
       </Reveal>
-      <Reveal opened={opened} index={4} className="mt-6 flex items-center justify-center gap-2 md:gap-3">
-        <span className="h-px w-5 md:w-6 opacity-60" style={{ backgroundColor: 'currentColor' }} />
-        <p className="font-serif-sc font-semibold tracking-[0.25em] uppercase text-[0.65rem] md:text-xs">September</p>
-        <p className="font-serif font-medium text-3xl md:text-4xl leading-none">19</p>
-        <p className="font-serif-sc font-semibold tracking-[0.25em] uppercase text-[0.65rem] md:text-xs">Saturday</p>
-        <p className="font-serif-sc font-semibold tracking-[0.25em] uppercase text-[0.65rem] md:text-xs">2026</p>
-        <span className="h-px w-5 md:w-6 opacity-60" style={{ backgroundColor: 'currentColor' }} />
+      <Reveal opened={opened} index={4} className="mt-6">
+        <div className="flex items-center justify-center gap-2 md:gap-3">
+          <span className="h-px w-5 md:w-6 opacity-60" style={{ backgroundColor: 'currentColor' }} />
+          <p className="font-serif-sc font-semibold tracking-[0.25em] uppercase text-[0.65rem] md:text-xs">September</p>
+          <p className="font-serif font-medium text-3xl md:text-4xl leading-none">19</p>
+          <p className="font-serif-sc font-semibold tracking-[0.25em] uppercase text-[0.65rem] md:text-xs">2026</p>
+          <span className="h-px w-5 md:w-6 opacity-60" style={{ backgroundColor: 'currentColor' }} />
+        </div>
+        <p className="mt-1 font-serif-sc font-semibold tracking-[0.25em] uppercase text-[0.65rem] md:text-xs" style={{ opacity: 0.85 }}>
+          Saturday
+        </p>
       </Reveal>
       <Reveal opened={opened} index={5} dim={0.9} className="mt-4 font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm">
-        Seven Thirty in the Evening
+        At Seven Thirty in the Evening
       </Reveal>
       <Reveal opened={opened} index={6} dim={0.9} className="mt-8 font-serif-sc font-semibold tracking-[0.35em] uppercase text-xs">
         To be held at
