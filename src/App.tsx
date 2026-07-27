@@ -129,12 +129,12 @@ function Reveal({
   );
 }
 
-// Dark-green text over a photo that itself has dark-green cypress trees is a
-// hue collision no shadow fully fixes. Light cream text with a firm dark
-// contact shadow — the standard "text over photo" treatment — holds up
-// regardless of what's directly behind any given line.
-const HERO_TEXT_COLOR = 'oklch(97% 0.01 90)';
-const HERO_TEXT_SHADOW = '0 1px 3px rgba(0,0,0,0.55), 0 3px 10px rgba(0,0,0,0.45), 0 8px 28px rgba(0,0,0,0.3)';
+// Black ink on the cream scrim panel below it — the panel is what carries
+// the contrast, not the shadow, so this stays legible against sky, columns
+// or foliage alike. The halo shadow just softens the few edges that sit
+// outside the panel's blurred border.
+const HERO_TEXT_COLOR = '#171412';
+const HERO_TEXT_SHADOW = '0 1px 14px rgba(255,251,242,0.9), 0 1px 2px rgba(255,251,242,0.7)';
 
 function HeroCopy({ opened }: { opened: boolean }) {
   return (
@@ -235,19 +235,20 @@ function App() {
             />
           ))}
 
-          {/* a solid, near-uniform dark panel behind the text block. The photo runs
-              from pale sky at the top to shaded columns/foliage further down, so a
-              radial vignette (strong center, fading at the edges) left the top
-              lines under-covered against the bright sky. A flat plateau with only
-              the outer margin softened — then blurred for a soft edge — holds
-              contrast evenly across the whole stack instead. */}
+          {/* a solid, near-uniform cream panel behind the text block, so the black
+              text reads like ink on cardstock regardless of what's directly behind
+              it in the photo — pale sky at the top, shaded columns/foliage lower
+              down. A flat plateau with only the outer margin softened, then
+              blurred for a soft edge, holds contrast evenly across the whole
+              stack instead of a radial vignette that fades before reaching the
+              top lines. */}
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-[900ms]"
             style={{
               opacity: hero.opened ? 1 : 0,
               width: 'min(92vw, 30rem)',
               height: 'min(92vh, 820px)',
-              background: 'linear-gradient(to bottom, transparent 0%, rgba(8,7,5,0.6) 10%, rgba(8,7,5,0.6) 90%, transparent 100%)',
+              background: 'linear-gradient(to bottom, transparent 0%, rgba(250,246,236,0.8) 10%, rgba(250,246,236,0.8) 90%, transparent 100%)',
               filter: 'blur(28px)'
             }}
           />
@@ -336,8 +337,8 @@ function App() {
           >
             <p className="font-serif-sc font-semibold text-xs tracking-[0.35em] uppercase">Keep scrolling</p>
             <span className="relative flex h-6 w-6 items-center justify-center">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-40" />
-              <span className="relative h-1.5 w-1.5 rounded-full bg-white" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-40" style={{ backgroundColor: HERO_TEXT_COLOR }} />
+              <span className="relative h-1.5 w-1.5 rounded-full" style={{ backgroundColor: HERO_TEXT_COLOR }} />
             </span>
           </div>
         </div>
