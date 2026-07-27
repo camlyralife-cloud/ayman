@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { Users, Flower2, Camera, UtensilsCrossed, Gem } from 'lucide-react';
+import { Cake } from 'lucide-react';
 
 import weddingBg from './assets/wedding-bg.jpg';
 import bow from './assets/bow.png';
@@ -7,17 +7,26 @@ import pattern from './assets/pattern.jpg';
 import venuePhoto from './assets/venue.png';
 import valance from './assets/valance.png';
 import urn from './assets/urn.png';
+import guestArrivalImg from './assets/Guest arrival.png';
+import grandEntryImg from './assets/Wedding.png';
+import photographyImg from './assets/Photos.png';
+import dinnerImg from './assets/Dinner.png';
+import sendOffImg from './assets/Send Off.png';
 
 const WEDDING_DATE = new Date('2026-09-19T19:30:00').getTime();
 const MAP_LINK = 'https://share.google/UfhC355pFwwVhutx4';
 
-const timeline = [
-  { time: '7:30 PM', label: 'Guest Arrival', icon: Users },
-  { time: '8:00 PM', label: 'Grand Entry', icon: Flower2 },
-  { time: '8:15 PM', label: 'Photography', icon: Camera },
-  { time: '8:30 PM', label: 'Dinner', icon: UtensilsCrossed },
-  { time: '10:00 PM', label: 'Sweet Moments', icon: Camera },
-  { time: '11:00 PM', label: 'Send-Off', icon: Gem }
+// Every slot uses the real illustration you dropped into src/assets, except
+// Sweet Moments — no image was added for that one yet, so it falls back to a
+// plain line icon. Add a "Sweet Moments" image and swap it in the same way
+// as the others once it's there.
+const timeline: { time: string; label: string; image?: string; icon?: typeof Cake }[] = [
+  { time: '7:30 PM', label: 'Guest Arrival', image: guestArrivalImg },
+  { time: '8:00 PM', label: 'Grand Entry', image: grandEntryImg },
+  { time: '8:15 PM', label: 'Photography', image: photographyImg },
+  { time: '8:30 PM', label: 'Dinner', image: dinnerImg },
+  { time: '10:00 PM', label: 'Sweet Moments', icon: Cake },
+  { time: '11:00 PM', label: 'Send-Off', image: sendOffImg }
 ];
 
 const family = [
@@ -452,12 +461,27 @@ function App() {
         <div className="relative mx-auto max-w-md text-center">
           <p className="script-title text-4xl md:text-5xl text-[#8c5a62]">Evening Timeline</p>
           <p className="mt-2 font-serif text-base text-[#a4767c]">19 · September · 2026</p>
-          <div className="mt-10 flex flex-col gap-4 text-left">
+          <div className="relative mt-10 grid grid-cols-2 gap-x-4 gap-y-10">
+            {/* dotted divider between the two columns, matching a two-column
+                order-of-events layout rather than a single stacked list */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute bottom-2 left-1/2 top-2 w-px -translate-x-1/2"
+              style={{
+                backgroundImage: 'linear-gradient(to bottom, #d9b3bc 50%, transparent 50%)',
+                backgroundSize: '2px 10px',
+                backgroundRepeat: 'repeat-y'
+              }}
+            />
             {timeline.map((item) => (
-              <div key={item.time} className="rounded-2xl p-5" style={{ backgroundColor: 'rgba(255,255,255,0.45)' }}>
-                <item.icon className="h-5 w-5" style={{ color: '#b3838c' }} />
-                <p className="mt-3 font-sans text-sm text-[#a4767c]">{item.label}</p>
-                <p className="mt-1 font-serif text-2xl font-semibold text-[#8c5a62]">{item.time}</p>
+              <div key={item.time} className="flex flex-col items-center gap-1.5 px-2">
+                {item.image ? (
+                  <img src={item.image} alt="" aria-hidden loading="lazy" className="h-14 w-14 object-contain" />
+                ) : item.icon ? (
+                  <item.icon className="h-7 w-7" style={{ color: '#b3838c' }} strokeWidth={1.4} />
+                ) : null}
+                <p className="mt-1 font-serif text-lg font-semibold text-[#8c5a62]">{item.time}</p>
+                <p className="font-sans text-xs text-[#a4767c]">{item.label}</p>
               </div>
             ))}
           </div>
