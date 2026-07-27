@@ -95,14 +95,31 @@ function useHeroOpen() {
   return { mounted, opened, open: () => setOpened(true) };
 }
 
-/** Fades a line up into place on its own staggered delay, once `opened` is true. */
-function Reveal({ opened, index, className, children }: { opened: boolean; index: number; className?: string; children: ReactNode }) {
+/**
+ * Fades a line up into place on its own staggered delay, once `opened` is
+ * true. `dim` (0–1) sets that line's resting opacity once revealed — for
+ * secondary lines that should read a touch quieter than the primary ones —
+ * without fighting the 0/1 opacity the reveal itself animates.
+ */
+function Reveal({
+  opened,
+  index,
+  dim = 1,
+  className,
+  children
+}: {
+  opened: boolean;
+  index: number;
+  dim?: number;
+  className?: string;
+  children: ReactNode;
+}) {
   const delay = TEXT_BASE_DELAY + index * TEXT_STAGGER;
   return (
     <div
       className={className}
       style={{
-        opacity: opened ? 1 : 0,
+        opacity: opened ? dim : 0,
         transform: `translateY(${opened ? 0 : 12}px)`,
         transition: `opacity ${TEXT_DURATION}ms ease ${opened ? `${delay}ms` : '0ms'}, transform ${TEXT_DURATION}ms ease ${opened ? `${delay}ms` : '0ms'}`
       }}
@@ -112,42 +129,47 @@ function Reveal({ opened, index, className, children }: { opened: boolean; index
   );
 }
 
-const HERO_TEXT_SHADOW = '0 1px 2px rgba(25,18,10,0.4), 0 2px 6px rgba(25,18,10,0.28), 0 2px 22px rgba(255,253,246,0.75)';
+// Dark-green text over a photo that itself has dark-green cypress trees is a
+// hue collision no shadow fully fixes. Light cream text with a firm dark
+// contact shadow — the standard "text over photo" treatment — holds up
+// regardless of what's directly behind any given line.
+const HERO_TEXT_COLOR = 'oklch(97% 0.01 90)';
+const HERO_TEXT_SHADOW = '0 1px 3px rgba(0,0,0,0.55), 0 3px 10px rgba(0,0,0,0.45), 0 8px 28px rgba(0,0,0,0.3)';
 
 function HeroCopy({ opened }: { opened: boolean }) {
   return (
-    <div className="pointer-events-auto max-w-md text-center px-6" style={{ textShadow: HERO_TEXT_SHADOW }}>
-      <Reveal opened={opened} index={0} className="font-serif-sc font-semibold text-sm tracking-[0.4em]">
-        <span style={{ color: mix('primary', 92) }}>✦ A &amp; S ✦</span>
+    <div className="pointer-events-auto max-w-md text-center px-6" style={{ color: HERO_TEXT_COLOR, textShadow: HERO_TEXT_SHADOW }}>
+      <Reveal opened={opened} index={0} dim={0.92} className="font-serif-sc font-semibold text-sm tracking-[0.4em]">
+        ✦ A &amp; S ✦
       </Reveal>
       <Reveal opened={opened} index={1}>
-        <p className="script-title mt-4 text-5xl md:text-7xl leading-[1] text-primary">Ayman</p>
-        <p className="script-title text-3xl md:text-4xl leading-[1.2] my-2" style={{ color: mix('primary', 88) }}>&</p>
-        <p className="script-title text-5xl md:text-7xl leading-[1] text-primary">Sahar</p>
+        <p className="script-title mt-4 text-5xl md:text-7xl leading-[1]">Ayman</p>
+        <p className="script-title text-3xl md:text-4xl leading-[1.2] my-2" style={{ opacity: 0.85 }}>&</p>
+        <p className="script-title text-5xl md:text-7xl leading-[1]">Sahar</p>
       </Reveal>
-      <Reveal opened={opened} index={2} className="mt-8 font-serif font-medium text-base md:text-lg text-foreground leading-relaxed">
+      <Reveal opened={opened} index={2} className="mt-8 font-serif font-medium text-base md:text-lg leading-relaxed">
         Request the honour of your presence
       </Reveal>
-      <Reveal opened={opened} index={3} className="font-serif font-medium text-base md:text-lg text-foreground leading-relaxed">
+      <Reveal opened={opened} index={3} className="font-serif font-medium text-base md:text-lg leading-relaxed">
         as they exchange vows on
       </Reveal>
       <Reveal opened={opened} index={4} className="mt-6 flex items-center justify-center gap-3 md:gap-4">
-        <span className="h-px w-6 md:w-8" style={{ backgroundColor: 'var(--foreground)' }} />
-        <p className="font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm text-foreground">September</p>
-        <p className="font-serif font-medium text-3xl md:text-4xl leading-none text-foreground">19</p>
-        <p className="font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm text-foreground">2026</p>
-        <span className="h-px w-6 md:w-8" style={{ backgroundColor: 'var(--foreground)' }} />
+        <span className="h-px w-6 md:w-8 opacity-60" style={{ backgroundColor: 'currentColor' }} />
+        <p className="font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm">September</p>
+        <p className="font-serif font-medium text-3xl md:text-4xl leading-none">19</p>
+        <p className="font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm">2026</p>
+        <span className="h-px w-6 md:w-8 opacity-60" style={{ backgroundColor: 'currentColor' }} />
       </Reveal>
-      <Reveal opened={opened} index={5} className="mt-5 font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm text-foreground">
+      <Reveal opened={opened} index={5} dim={0.9} className="mt-5 font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm">
         Saturday · Seven Thirty in the Evening
       </Reveal>
-      <Reveal opened={opened} index={6} className="mt-8 font-serif-sc font-semibold tracking-[0.35em] uppercase text-xs text-foreground">
+      <Reveal opened={opened} index={6} dim={0.9} className="mt-8 font-serif-sc font-semibold tracking-[0.35em] uppercase text-xs">
         To be held at
       </Reveal>
-      <Reveal opened={opened} index={7} className="script-title mt-2 text-3xl md:text-4xl text-primary">
+      <Reveal opened={opened} index={7} className="script-title mt-2 text-3xl md:text-4xl">
         North Avenue
       </Reveal>
-      <Reveal opened={opened} index={8} className="font-serif font-medium italic text-foreground">
+      <Reveal opened={opened} index={8} dim={0.92} className="font-serif font-medium italic">
         Event Space &amp; Banquet Hall
       </Reveal>
     </div>
@@ -213,12 +235,16 @@ function App() {
             />
           ))}
 
-          {/* a soft scrim behind the text block, for legibility over the busy photo */}
+          {/* a soft scrim behind the text block, for legibility over the busy photo.
+              Height is set in vh (not vw) so it still covers the full stack of
+              lines on narrow phones, where the text column is much taller than
+              it is wide. */}
           <div
-            className="pointer-events-none absolute left-1/2 top-1/2 h-[85vw] max-h-[560px] w-[85vw] max-w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-[900ms]"
+            className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 transition-opacity duration-[900ms]"
             style={{
               opacity: hero.opened ? 1 : 0,
-              background: 'radial-gradient(ellipse at center, rgba(20,16,10,0.16) 0%, rgba(20,16,10,0.07) 55%, transparent 78%)'
+              height: 'min(88vh, 760px)',
+              background: 'radial-gradient(52% 100% at 50% 50%, rgba(15,12,8,0.32) 0%, rgba(15,12,8,0.16) 55%, transparent 80%)'
             }}
           />
 
@@ -296,19 +322,18 @@ function App() {
 
           {/* scroll hint — only appears once the invitation has been opened */}
           <div
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 text-muted-foreground"
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
             style={{
-              opacity: hero.opened ? 1 : 0,
+              opacity: hero.opened ? 0.9 : 0,
+              color: HERO_TEXT_COLOR,
+              textShadow: HERO_TEXT_SHADOW,
               transition: `opacity 800ms ease ${hero.opened ? `${HINT_DELAY}ms` : '0ms'}`
             }}
           >
-            <p className="font-serif-sc text-xs tracking-[0.35em] uppercase">Keep scrolling</p>
+            <p className="font-serif-sc font-semibold text-xs tracking-[0.35em] uppercase">Keep scrolling</p>
             <span className="relative flex h-6 w-6 items-center justify-center">
-              <span
-                className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
-                style={{ backgroundColor: mix('muted-foreground', 35) }}
-              />
-              <span className="relative h-1.5 w-1.5 rounded-full" style={{ backgroundColor: 'var(--muted-foreground)' }} />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-40" />
+              <span className="relative h-1.5 w-1.5 rounded-full bg-white" />
             </span>
           </div>
         </div>
