@@ -235,16 +235,20 @@ function App() {
             />
           ))}
 
-          {/* a soft scrim behind the text block, for legibility over the busy photo.
-              Height is set in vh (not vw) so it still covers the full stack of
-              lines on narrow phones, where the text column is much taller than
-              it is wide. */}
+          {/* a solid, near-uniform dark panel behind the text block. The photo runs
+              from pale sky at the top to shaded columns/foliage further down, so a
+              radial vignette (strong center, fading at the edges) left the top
+              lines under-covered against the bright sky. A flat plateau with only
+              the outer margin softened — then blurred for a soft edge — holds
+              contrast evenly across the whole stack instead. */}
           <div
-            className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 transition-opacity duration-[900ms]"
+            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-[900ms]"
             style={{
               opacity: hero.opened ? 1 : 0,
-              height: 'min(88vh, 760px)',
-              background: 'radial-gradient(52% 100% at 50% 50%, rgba(15,12,8,0.32) 0%, rgba(15,12,8,0.16) 55%, transparent 80%)'
+              width: 'min(92vw, 30rem)',
+              height: 'min(92vh, 820px)',
+              background: 'linear-gradient(to bottom, transparent 0%, rgba(8,7,5,0.6) 10%, rgba(8,7,5,0.6) 90%, transparent 100%)',
+              filter: 'blur(28px)'
             }}
           />
 
