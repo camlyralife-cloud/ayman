@@ -129,12 +129,12 @@ function Reveal({
   );
 }
 
-// Black ink on the cream scrim panel below it — the panel is what carries
+// Deep rose ink on the pink scrim panel below it — the panel is what carries
 // the contrast, not the shadow, so this stays legible against sky, columns
 // or foliage alike. The halo shadow just softens the few edges that sit
 // outside the panel's blurred border.
-const HERO_TEXT_COLOR = '#171412';
-const HERO_TEXT_SHADOW = '0 1px 14px rgba(255,251,242,0.9), 0 1px 2px rgba(255,251,242,0.7)';
+const HERO_TEXT_COLOR = '#2c141c';
+const HERO_TEXT_SHADOW = '0 1px 14px rgba(255,240,244,0.9), 0 1px 2px rgba(255,240,244,0.7)';
 
 function HeroCopy({ opened }: { opened: boolean }) {
   return (
@@ -147,21 +147,22 @@ function HeroCopy({ opened }: { opened: boolean }) {
         <p className="script-title text-3xl md:text-4xl leading-[1.2] my-2" style={{ opacity: 0.85 }}>&</p>
         <p className="script-title text-5xl md:text-7xl leading-[1]">Sahar</p>
       </Reveal>
-      <Reveal opened={opened} index={2} className="mt-8 font-serif font-medium text-base md:text-lg leading-relaxed">
-        Request the honour of your presence
+      <Reveal opened={opened} index={2} dim={0.88} className="mt-6 font-serif-sc font-semibold text-xs tracking-[0.2em] uppercase leading-relaxed">
+        We request the pleasure of your company
       </Reveal>
-      <Reveal opened={opened} index={3} className="font-serif font-medium text-base md:text-lg leading-relaxed">
-        as they exchange vows on
+      <Reveal opened={opened} index={3} dim={0.88} className="font-serif-sc font-semibold text-xs tracking-[0.2em] uppercase leading-relaxed">
+        as they exchange vows
       </Reveal>
-      <Reveal opened={opened} index={4} className="mt-6 flex items-center justify-center gap-3 md:gap-4">
-        <span className="h-px w-6 md:w-8 opacity-60" style={{ backgroundColor: 'currentColor' }} />
-        <p className="font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm">September</p>
+      <Reveal opened={opened} index={4} className="mt-6 flex items-center justify-center gap-2 md:gap-3">
+        <span className="h-px w-5 md:w-6 opacity-60" style={{ backgroundColor: 'currentColor' }} />
+        <p className="font-serif-sc font-semibold tracking-[0.25em] uppercase text-[0.65rem] md:text-xs">September</p>
         <p className="font-serif font-medium text-3xl md:text-4xl leading-none">19</p>
-        <p className="font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm">2026</p>
-        <span className="h-px w-6 md:w-8 opacity-60" style={{ backgroundColor: 'currentColor' }} />
+        <p className="font-serif-sc font-semibold tracking-[0.25em] uppercase text-[0.65rem] md:text-xs">Saturday</p>
+        <p className="font-serif-sc font-semibold tracking-[0.25em] uppercase text-[0.65rem] md:text-xs">2026</p>
+        <span className="h-px w-5 md:w-6 opacity-60" style={{ backgroundColor: 'currentColor' }} />
       </Reveal>
-      <Reveal opened={opened} index={5} dim={0.9} className="mt-5 font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm">
-        Saturday · Seven Thirty in the Evening
+      <Reveal opened={opened} index={5} dim={0.9} className="mt-4 font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm">
+        Seven Thirty in the Evening
       </Reveal>
       <Reveal opened={opened} index={6} dim={0.9} className="mt-8 font-serif-sc font-semibold tracking-[0.35em] uppercase text-xs">
         To be held at
@@ -215,9 +216,18 @@ function App() {
             className="pointer-events-none absolute inset-0"
             style={{ backgroundImage: `linear-gradient(to bottom, ${mix('background', 10)}, transparent, ${mix('background', 50)})` }}
           />
+          {/* a soft pink/lavender wash tying the photo's blue sky and greenery into
+              the baby-pink theme, rather than leaving them their natural colors */}
           <div
             className="pointer-events-none absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse at center, transparent 55%, rgba(20,16,10,0.16) 100%)' }}
+            style={{
+              background: 'linear-gradient(165deg, rgba(255,205,222,0.4) 0%, rgba(255,231,238,0.18) 45%, rgba(214,176,196,0.32) 100%)',
+              mixBlendMode: 'soft-light'
+            }}
+          />
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{ background: 'radial-gradient(ellipse at center, transparent 55%, rgba(40,16,26,0.16) 100%)' }}
           />
 
           {HERO_MOTES.map((mote, index) => (
@@ -235,20 +245,20 @@ function App() {
             />
           ))}
 
-          {/* a solid, near-uniform cream panel behind the text block, so the black
-              text reads like ink on cardstock regardless of what's directly behind
-              it in the photo — pale sky at the top, shaded columns/foliage lower
-              down. A flat plateau with only the outer margin softened, then
-              blurred for a soft edge, holds contrast evenly across the whole
-              stack instead of a radial vignette that fades before reaching the
-              top lines. */}
+          {/* a solid, near-uniform blush-pink panel behind the text block, so the
+              deep-rose text reads like ink on cardstock regardless of what's
+              directly behind it in the photo — pale sky at the top, shaded
+              columns/foliage lower down. A flat plateau with only the outer
+              margin softened, then blurred for a soft edge, holds contrast
+              evenly across the whole stack instead of a radial vignette that
+              fades before reaching the top lines. */}
           <div
             className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-[900ms]"
             style={{
               opacity: hero.opened ? 1 : 0,
               width: 'min(92vw, 30rem)',
               height: 'min(92vh, 820px)',
-              background: 'linear-gradient(to bottom, transparent 0%, rgba(250,246,236,0.8) 10%, rgba(250,246,236,0.8) 90%, transparent 100%)',
+              background: 'linear-gradient(to bottom, transparent 0%, rgba(255,238,242,0.82) 10%, rgba(255,238,242,0.82) 90%, transparent 100%)',
               filter: 'blur(28px)'
             }}
           />
