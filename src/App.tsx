@@ -16,11 +16,13 @@ import sendOffImg from './assets/Send Off.png';
 const WEDDING_DATE = new Date('2026-09-19T19:30:00').getTime();
 const MAP_LINK = 'https://share.google/UfhC355pFwwVhutx4';
 
+type TimelineEntry = { time: string; label: string; image?: string; icon?: typeof Cake };
+
 // Every slot uses the real illustration you dropped into src/assets, except
 // Sweet Moments — no image was added for that one yet, so it falls back to a
 // plain line icon. Add a "Sweet Moments" image and swap it in the same way
 // as the others once it's there.
-const timeline: { time: string; label: string; image?: string; icon?: typeof Cake }[] = [
+const timeline: TimelineEntry[] = [
   { time: '7:30 PM', label: 'Guest Arrival', image: guestArrivalImg },
   { time: '8:00 PM', label: 'Grand Entry', image: grandEntryImg },
   { time: '8:15 PM', label: 'Photography', image: photographyImg },
@@ -59,8 +61,13 @@ const HERO_MOTES = [
   { left: '89%', size: 3, duration: 13, delay: -8 }
 ];
 
-/** True once the element has scrolled into view — flips once and stays true, for a scroll-triggered reveal. */
-function useInView<T extends HTMLElement>(threshold = 0.25) {
+/**
+ * Tracks whether the element is in view. With `once` (the default), it
+ * flips true and stays there — good for a one-time section reveal. With
+ * `once: false`, it tracks live, so the caller can animate back out on
+ * scroll-up too, not just in on scroll-down.
+ */
+function useInView<T extends HTMLElement>(threshold = 0.25, once = true) {
   const ref = useRef<T | null>(null);
   const [inView, setInView] = useState(false);
 
@@ -71,14 +78,16 @@ function useInView<T extends HTMLElement>(threshold = 0.25) {
       ([entry]) => {
         if (entry.isIntersecting) {
           setInView(true);
-          observer.disconnect();
+          if (once) observer.disconnect();
+        } else if (!once) {
+          setInView(false);
         }
       },
       { threshold }
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [threshold]);
+  }, [threshold, once]);
 
   return { ref, inView };
 }
@@ -222,6 +231,56 @@ function FamilyMember({ role, name }: { role: string; name: string }) {
     <div>
       <p className="font-serif-sc text-xs tracking-[0.4em] uppercase text-muted-foreground">{role}</p>
       <p className="script-title mt-3 text-4xl md:text-5xl text-primary">{name}</p>
+    </div>
+  );
+}
+
+/**
+ * One stop on the evening timeline. Desktop alternates left/right of a
+ * central line, like a proper wedding-day journey; mobile collapses to a
+ * single line on the left with every item reading the same way, keeping the
+ * same visual hierarchy. Each item watches its own visibility, so they
+ * reveal one at a time as the guest scrolls past, not all at once.
+ */
+function TimelineItem({ item, index }: { item: TimelineEntry; index: number }) {
+  // `once: false` — this one tracks live, so it fades back out on scroll-up
+  // too, not just in on the way down.
+  const { ref, inView } = useInView<HTMLDivElement>(0.35, false);
+  const isRight = index % 2 === 1;
+
+  const motionClass = inView
+    ? 'opacity-100 translate-y-0 md:translate-x-0'
+    : `opacity-0 translate-y-6 md:translate-y-0 ${isRight ? 'md:translate-x-10' : 'md:-translate-x-10'}`;
+
+  return (
+    <div ref={ref} className="relative grid grid-cols-[2.5rem_1fr] items-center gap-x-4 md:grid-cols-[1fr_2.5rem_1fr] md:gap-x-6">
+      <div className="relative flex justify-center md:col-start-2 md:row-start-1">
+        <span
+          className="h-3 w-3 rounded-full border-2 transition-transform duration-500 ease-out"
+          style={{
+            borderColor: '#8c5a62',
+            backgroundColor: '#fdeef1',
+            transform: inView ? 'scale(1)' : 'scale(0)',
+            transitionDelay: inView ? '150ms' : '0ms'
+          }}
+        />
+      </div>
+
+      <div
+        className={`md:row-start-1 text-left transition-all duration-700 ease-out ${motionClass} ${
+          isRight ? 'md:col-start-3 md:text-left' : 'md:col-start-1 md:text-right'
+        }`}
+      >
+        <div className={`flex flex-col items-start gap-2 ${isRight ? 'md:items-start' : 'md:items-end'}`}>
+          {item.image ? (
+            <img src={item.image} alt="" aria-hidden loading="lazy" className="h-16 w-16 object-contain md:h-20 md:w-20" />
+          ) : item.icon ? (
+            <item.icon className="h-10 w-10 md:h-12 md:w-12" style={{ color: '#b3838c' }} strokeWidth={1.2} />
+          ) : null}
+          <p className="font-serif text-lg font-semibold text-[#8c5a62]">{item.time}</p>
+          <p className="font-sans text-xs tracking-wide text-[#a4767c]">{item.label}</p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -483,7 +542,7 @@ function App() {
             WebkitMaskImage: 'radial-gradient(circle at 75% 75%, black 55%, transparent 78%)'
           }}
         />
-        <div ref={timelineView.ref} className="relative mx-auto max-w-md text-center">
+        <div ref={timelineView.ref} className="relative mx-auto max-w-2xl text-center">
           <p
             className="script-title text-4xl md:text-5xl text-[#8c5a62] transition-all duration-700 ease-out"
             style={{ opacity: timelineView.inView ? 1 : 0, transform: `translateY(${timelineView.inView ? 0 : 16}px)` }}
@@ -500,46 +559,22 @@ function App() {
           >
             19 · September · 2026
           </p>
-          <div className="relative mt-12 grid grid-cols-2 gap-x-4 gap-y-14">
-            {/* dotted divider between the two columns, matching a two-column
-                order-of-events layout rather than a single stacked list */}
+
+          {/* a beautiful wedding-day journey the guest scrolls through — the
+              central line runs continuously top to bottom; on desktop each
+              stop alternates left/right of it, on mobile it collapses to a
+              single line on the left with every stop reading the same way */}
+          <div className="relative mt-16">
             <div
               aria-hidden
-              className="pointer-events-none absolute bottom-2 left-1/2 top-2 w-px -translate-x-1/2 transition-opacity duration-700"
-              style={{
-                opacity: timelineView.inView ? 1 : 0,
-                backgroundImage: 'linear-gradient(to bottom, #cf9aa6 50%, transparent 50%)',
-                backgroundSize: '2px 10px',
-                backgroundRepeat: 'repeat-y'
-              }}
+              className="pointer-events-none absolute left-5 top-2 bottom-2 w-px md:left-1/2 md:-translate-x-1/2"
+              style={{ backgroundImage: 'linear-gradient(to bottom, #cf9aa6 50%, transparent 50%)', backgroundSize: '2px 10px', backgroundRepeat: 'repeat-y' }}
             />
-            {timeline.map((item, index) => (
-              <div
-                key={item.time}
-                className="group flex flex-col items-center gap-2 px-2 transition-all duration-700 ease-out"
-                style={{
-                  opacity: timelineView.inView ? 1 : 0,
-                  transform: `translateY(${timelineView.inView ? 0 : 28}px) scale(${timelineView.inView ? 1 : 0.9})`,
-                  transitionDelay: timelineView.inView ? `${220 + index * 130}ms` : '0ms'
-                }}
-              >
-                <div
-                  className="flex h-20 w-20 items-center justify-center rounded-full transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-1"
-                  style={{
-                    backgroundColor: 'rgba(255,255,255,0.7)',
-                    boxShadow: '0 12px 26px -14px rgba(140,90,98,0.45), 0 0 0 1px rgba(217,153,166,0.4)'
-                  }}
-                >
-                  {item.image ? (
-                    <img src={item.image} alt="" aria-hidden loading="lazy" className="h-12 w-12 object-contain" />
-                  ) : item.icon ? (
-                    <item.icon className="h-8 w-8" style={{ color: '#b3838c' }} strokeWidth={1.3} />
-                  ) : null}
-                </div>
-                <p className="mt-1 font-serif text-lg font-semibold text-[#8c5a62]">{item.time}</p>
-                <p className="font-sans text-xs tracking-wide text-[#a4767c]">{item.label}</p>
-              </div>
-            ))}
+            <div className="flex flex-col gap-14 md:gap-4">
+              {timeline.map((item, index) => (
+                <TimelineItem key={item.time} item={item} index={index} />
+              ))}
+            </div>
           </div>
         </div>
       </section>
