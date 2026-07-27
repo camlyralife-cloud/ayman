@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Cake } from 'lucide-react';
 
 import weddingBg from './assets/wedding-bg.jpg';
@@ -58,6 +58,30 @@ const HERO_MOTES = [
   { left: '77%', size: 5, duration: 18, delay: -3 },
   { left: '89%', size: 3, duration: 13, delay: -8 }
 ];
+
+/** True once the element has scrolled into view — flips once and stays true, for a scroll-triggered reveal. */
+function useInView<T extends HTMLElement>(threshold = 0.25) {
+  const ref = useRef<T | null>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { ref, inView };
+}
 
 function useCountdown(target: number) {
   const [now, setNow] = useState(() => Date.now());
@@ -205,6 +229,7 @@ function FamilyMember({ role, name }: { role: string; name: string }) {
 function App() {
   const hero = useHeroOpen();
   const { days, hours, minutes, seconds } = useCountdown(WEDDING_DATE);
+  const timelineView = useInView<HTMLDivElement>();
 
   return (
     <main className="wedding-root relative">
@@ -458,30 +483,61 @@ function App() {
             WebkitMaskImage: 'radial-gradient(circle at 75% 75%, black 55%, transparent 78%)'
           }}
         />
-        <div className="relative mx-auto max-w-md text-center">
-          <p className="script-title text-4xl md:text-5xl text-[#8c5a62]">Evening Timeline</p>
-          <p className="mt-2 font-serif text-base text-[#a4767c]">19 · September · 2026</p>
-          <div className="relative mt-10 grid grid-cols-2 gap-x-4 gap-y-10">
+        <div ref={timelineView.ref} className="relative mx-auto max-w-md text-center">
+          <p
+            className="script-title text-4xl md:text-5xl text-[#8c5a62] transition-all duration-700 ease-out"
+            style={{ opacity: timelineView.inView ? 1 : 0, transform: `translateY(${timelineView.inView ? 0 : 16}px)` }}
+          >
+            Evening Timeline
+          </p>
+          <p
+            className="mt-2 font-serif text-base text-[#a4767c] transition-all duration-700 ease-out"
+            style={{
+              opacity: timelineView.inView ? 1 : 0,
+              transform: `translateY(${timelineView.inView ? 0 : 16}px)`,
+              transitionDelay: timelineView.inView ? '100ms' : '0ms'
+            }}
+          >
+            19 · September · 2026
+          </p>
+          <div className="relative mt-12 grid grid-cols-2 gap-x-4 gap-y-14">
             {/* dotted divider between the two columns, matching a two-column
                 order-of-events layout rather than a single stacked list */}
             <div
               aria-hidden
-              className="pointer-events-none absolute bottom-2 left-1/2 top-2 w-px -translate-x-1/2"
+              className="pointer-events-none absolute bottom-2 left-1/2 top-2 w-px -translate-x-1/2 transition-opacity duration-700"
               style={{
-                backgroundImage: 'linear-gradient(to bottom, #d9b3bc 50%, transparent 50%)',
+                opacity: timelineView.inView ? 1 : 0,
+                backgroundImage: 'linear-gradient(to bottom, #cf9aa6 50%, transparent 50%)',
                 backgroundSize: '2px 10px',
                 backgroundRepeat: 'repeat-y'
               }}
             />
-            {timeline.map((item) => (
-              <div key={item.time} className="flex flex-col items-center gap-1.5 px-2">
-                {item.image ? (
-                  <img src={item.image} alt="" aria-hidden loading="lazy" className="h-14 w-14 object-contain" />
-                ) : item.icon ? (
-                  <item.icon className="h-7 w-7" style={{ color: '#b3838c' }} strokeWidth={1.4} />
-                ) : null}
+            {timeline.map((item, index) => (
+              <div
+                key={item.time}
+                className="group flex flex-col items-center gap-2 px-2 transition-all duration-700 ease-out"
+                style={{
+                  opacity: timelineView.inView ? 1 : 0,
+                  transform: `translateY(${timelineView.inView ? 0 : 28}px) scale(${timelineView.inView ? 1 : 0.9})`,
+                  transitionDelay: timelineView.inView ? `${220 + index * 130}ms` : '0ms'
+                }}
+              >
+                <div
+                  className="flex h-20 w-20 items-center justify-center rounded-full transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-1"
+                  style={{
+                    backgroundColor: 'rgba(255,255,255,0.7)',
+                    boxShadow: '0 12px 26px -14px rgba(140,90,98,0.45), 0 0 0 1px rgba(217,153,166,0.4)'
+                  }}
+                >
+                  {item.image ? (
+                    <img src={item.image} alt="" aria-hidden loading="lazy" className="h-12 w-12 object-contain" />
+                  ) : item.icon ? (
+                    <item.icon className="h-8 w-8" style={{ color: '#b3838c' }} strokeWidth={1.3} />
+                  ) : null}
+                </div>
                 <p className="mt-1 font-serif text-lg font-semibold text-[#8c5a62]">{item.time}</p>
-                <p className="font-sans text-xs text-[#a4767c]">{item.label}</p>
+                <p className="font-sans text-xs tracking-wide text-[#a4767c]">{item.label}</p>
               </div>
             ))}
           </div>
