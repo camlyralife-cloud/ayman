@@ -112,40 +112,42 @@ function Reveal({ opened, index, className, children }: { opened: boolean; index
   );
 }
 
+const HERO_TEXT_SHADOW = '0 1px 2px rgba(25,18,10,0.4), 0 2px 6px rgba(25,18,10,0.28), 0 2px 22px rgba(255,253,246,0.75)';
+
 function HeroCopy({ opened }: { opened: boolean }) {
   return (
-    <div className="pointer-events-auto max-w-md text-center px-6" style={{ textShadow: '0 2px 20px rgba(255,253,246,0.6)' }}>
-      <Reveal opened={opened} index={0} className="font-serif-sc text-sm tracking-[0.4em]">
-        <span style={{ color: mix('primary', 75) }}>✦ A &amp; S ✦</span>
+    <div className="pointer-events-auto max-w-md text-center px-6" style={{ textShadow: HERO_TEXT_SHADOW }}>
+      <Reveal opened={opened} index={0} className="font-serif-sc font-semibold text-sm tracking-[0.4em]">
+        <span style={{ color: mix('primary', 92) }}>✦ A &amp; S ✦</span>
       </Reveal>
       <Reveal opened={opened} index={1}>
         <p className="script-title mt-4 text-5xl md:text-7xl leading-[1] text-primary">Ayman</p>
-        <p className="script-title text-3xl md:text-4xl leading-[1.2] my-2" style={{ color: mix('primary', 70) }}>&</p>
+        <p className="script-title text-3xl md:text-4xl leading-[1.2] my-2" style={{ color: mix('primary', 88) }}>&</p>
         <p className="script-title text-5xl md:text-7xl leading-[1] text-primary">Sahar</p>
       </Reveal>
-      <Reveal opened={opened} index={2} className="mt-8 font-serif text-base md:text-lg text-foreground leading-relaxed">
+      <Reveal opened={opened} index={2} className="mt-8 font-serif font-medium text-base md:text-lg text-foreground leading-relaxed">
         Request the honour of your presence
       </Reveal>
-      <Reveal opened={opened} index={3} className="font-serif text-base md:text-lg text-foreground leading-relaxed">
+      <Reveal opened={opened} index={3} className="font-serif font-medium text-base md:text-lg text-foreground leading-relaxed">
         as they exchange vows on
       </Reveal>
       <Reveal opened={opened} index={4} className="mt-6 flex items-center justify-center gap-3 md:gap-4">
-        <span className="h-px w-6 md:w-8 bg-border" />
-        <p className="font-serif-sc tracking-[0.3em] uppercase text-xs md:text-sm">September</p>
-        <p className="font-serif text-3xl md:text-4xl leading-none">19</p>
-        <p className="font-serif-sc tracking-[0.3em] uppercase text-xs md:text-sm">2026</p>
-        <span className="h-px w-6 md:w-8 bg-border" />
+        <span className="h-px w-6 md:w-8" style={{ backgroundColor: 'var(--foreground)' }} />
+        <p className="font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm text-foreground">September</p>
+        <p className="font-serif font-medium text-3xl md:text-4xl leading-none text-foreground">19</p>
+        <p className="font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm text-foreground">2026</p>
+        <span className="h-px w-6 md:w-8" style={{ backgroundColor: 'var(--foreground)' }} />
       </Reveal>
-      <Reveal opened={opened} index={5} className="mt-5 font-serif-sc tracking-[0.3em] uppercase text-xs md:text-sm text-muted-foreground">
+      <Reveal opened={opened} index={5} className="mt-5 font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm text-foreground">
         Saturday · Seven Thirty in the Evening
       </Reveal>
-      <Reveal opened={opened} index={6} className="mt-8 font-serif-sc tracking-[0.35em] uppercase text-xs text-muted-foreground">
+      <Reveal opened={opened} index={6} className="mt-8 font-serif-sc font-semibold tracking-[0.35em] uppercase text-xs text-foreground">
         To be held at
       </Reveal>
       <Reveal opened={opened} index={7} className="script-title mt-2 text-3xl md:text-4xl text-primary">
         North Avenue
       </Reveal>
-      <Reveal opened={opened} index={8} className="font-serif italic text-foreground">
+      <Reveal opened={opened} index={8} className="font-serif font-medium italic text-foreground">
         Event Space &amp; Banquet Hall
       </Reveal>
     </div>
@@ -210,6 +212,15 @@ function App() {
               }}
             />
           ))}
+
+          {/* a soft scrim behind the text block, for legibility over the busy photo */}
+          <div
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[85vw] max-h-[560px] w-[85vw] max-w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-[900ms]"
+            style={{
+              opacity: hero.opened ? 1 : 0,
+              background: 'radial-gradient(ellipse at center, rgba(20,16,10,0.16) 0%, rgba(20,16,10,0.07) 55%, transparent 78%)'
+            }}
+          />
 
           {/* PHASE 3 — the ceremony text rises in, one line at a time */}
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-6">
