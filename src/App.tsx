@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Gift } from 'lucide-react';
 import opening from './assets/Opening.jpg';
+import giftCard from './assets/gift-card.jpg';
 import bow from './assets/bow.png';
 import pattern from './assets/pattern.jpg';
 import venuePhoto from './assets/venue.png';
@@ -457,15 +457,13 @@ function App() {
 
       <section className="relative overflow-hidden py-20 px-6">
         <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #f8f3ef 0%, #fbe7ec 50%, #fdeef1 100%)' }} />
-        <div className="relative mx-auto max-w-md text-center">
-          <Gift className="mx-auto h-9 w-9" style={{ color: '#b3838c' }} strokeWidth={1.2} />
-          <p className="script-title mt-4 text-4xl md:text-5xl text-[#8c5a62]">Wedding Gifts</p>
-          <p className="mt-5 font-sans text-xs tracking-[0.15em] text-[#a4767c] md:text-sm">
-            YOUR PRESENCE IS THE GREATEST GIFT WE COULD ASK FOR
-          </p>
-          <p className="mt-4 font-serif italic text-lg text-[#8c5a62] md:text-xl">Be part of our happily ever after</p>
-          <div className="mx-auto mt-8 h-px w-16" style={{ backgroundColor: '#cf9aa6' }} />
-          <p className="script-title mt-8 text-3xl text-[#8c5a62] md:text-4xl">Ayman &amp; Sahar</p>
+        <div className="relative mx-auto max-w-sm text-center">
+          <img
+            src={giftCard}
+            alt="Wedding Gifts — your presence is the greatest gift we can receive"
+            className="mx-auto w-full"
+          />
+          <p className="script-title mt-6 text-3xl text-[#8c5a62] md:text-4xl">Ayman &amp; Sahar</p>
         </div>
       </section>
 
