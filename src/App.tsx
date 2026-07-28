@@ -245,7 +245,7 @@ function TimelineItem({ item, index }: { item: TimelineEntry; index: number }) {
     : `opacity-0 translate-y-10 scale-95 md:translate-y-0 ${isRight ? 'md:translate-x-16' : 'md:-translate-x-16'}`;
 
   return (
-    <div ref={ref} className="relative grid grid-cols-[2.5rem_1fr] items-center gap-x-4 md:grid-cols-[1fr_2.5rem_1fr] md:gap-x-10">
+    <div ref={ref} className="relative grid grid-cols-[2.5rem_1fr] items-center gap-x-4 md:grid-cols-[1fr_2.5rem_1fr] md:gap-x-6">
       <div className="relative flex justify-center md:col-start-2 md:row-start-1">
         <span
           className="h-3 w-3 rounded-full border-2 transition-transform duration-500 ease-out"
@@ -523,7 +523,7 @@ function App() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden py-24 px-6">
+      <section className="relative overflow-hidden py-16 px-6">
         <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #fdeef1 0%, #fbe7ec 45%, #f8f3ef 100%)' }} />
         <div ref={timelineView.ref} className="relative mx-auto max-w-2xl text-center lg:max-w-4xl">
           <p
@@ -547,13 +547,13 @@ function App() {
               central line runs continuously top to bottom; on desktop each
               stop alternates left/right of it, on mobile it collapses to a
               single line on the left with every stop reading the same way */}
-          <div className="relative mt-16">
+          <div className="relative mt-10">
             <div
               aria-hidden
               className="pointer-events-none absolute left-5 top-2 bottom-2 w-px md:left-1/2 md:-translate-x-1/2"
               style={{ backgroundImage: 'linear-gradient(to bottom, #cf9aa6 50%, transparent 50%)', backgroundSize: '2px 10px', backgroundRepeat: 'repeat-y' }}
             />
-            <div className="flex flex-col gap-16 md:gap-20 lg:gap-24">
+            <div className="flex flex-col gap-8 md:gap-10">
               {timeline.map((item, index) => (
                 <TimelineItem key={item.time} item={item} index={index} />
               ))}
