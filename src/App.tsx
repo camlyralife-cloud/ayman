@@ -271,11 +271,17 @@ function TimelineItem({ item, index }: { item: TimelineEntry; index: number }) {
           isRight ? 'md:col-start-3 md:text-left' : 'md:col-start-1 md:text-right'
         }`}
       >
-        <div className={`flex flex-col items-start gap-2 ${isRight ? 'md:items-start' : 'md:items-end'}`}>
+        <div className={`flex flex-col items-start gap-3 ${isRight ? 'md:items-start' : 'md:items-end'}`}>
           {item.image ? (
-            <img src={item.image} alt="" aria-hidden loading="lazy" className="h-16 w-16 object-contain md:h-20 md:w-20" />
+            <img
+              src={item.image}
+              alt=""
+              aria-hidden
+              loading="lazy"
+              className="max-h-20 max-w-20 md:max-h-[120px] md:max-w-[120px]"
+            />
           ) : item.icon ? (
-            <item.icon className="h-10 w-10 md:h-12 md:w-12" style={{ color: '#b3838c' }} strokeWidth={1.2} />
+            <item.icon className="h-16 w-16 md:h-24 md:w-24" style={{ color: '#b3838c' }} strokeWidth={1} />
           ) : null}
           <p className="font-serif text-lg font-semibold text-[#8c5a62]">{item.time}</p>
           <p className="font-sans text-xs tracking-wide text-[#a4767c]">{item.label}</p>
@@ -570,7 +576,7 @@ function App() {
               className="pointer-events-none absolute left-5 top-2 bottom-2 w-px md:left-1/2 md:-translate-x-1/2"
               style={{ backgroundImage: 'linear-gradient(to bottom, #cf9aa6 50%, transparent 50%)', backgroundSize: '2px 10px', backgroundRepeat: 'repeat-y' }}
             />
-            <div className="flex flex-col gap-14 md:gap-4">
+            <div className="flex flex-col gap-16 md:gap-12">
               {timeline.map((item, index) => (
                 <TimelineItem key={item.time} item={item} index={index} />
               ))}
