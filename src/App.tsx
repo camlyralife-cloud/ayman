@@ -253,7 +253,7 @@ function TimelineItem({ item, index }: { item: TimelineEntry; index: number }) {
     : `opacity-0 translate-y-6 md:translate-y-0 ${isRight ? 'md:translate-x-10' : 'md:-translate-x-10'}`;
 
   return (
-    <div ref={ref} className="relative grid grid-cols-[2.5rem_1fr] items-center gap-x-4 md:grid-cols-[1fr_2.5rem_1fr] md:gap-x-6">
+    <div ref={ref} className="relative grid grid-cols-[2.5rem_1fr] items-center gap-x-4 md:grid-cols-[1fr_2.5rem_1fr] md:gap-x-10">
       <div className="relative flex justify-center md:col-start-2 md:row-start-1">
         <span
           className="h-3 w-3 rounded-full border-2 transition-transform duration-500 ease-out"
@@ -278,10 +278,10 @@ function TimelineItem({ item, index }: { item: TimelineEntry; index: number }) {
               alt=""
               aria-hidden
               loading="lazy"
-              className="max-h-20 max-w-20 md:max-h-[120px] md:max-w-[120px]"
+              className="max-h-24 max-w-24 md:max-h-40 md:max-w-40 lg:max-h-52 lg:max-w-52"
             />
           ) : item.icon ? (
-            <item.icon className="h-16 w-16 md:h-24 md:w-24" style={{ color: '#b3838c' }} strokeWidth={1} />
+            <item.icon className="h-16 w-16 md:h-28 md:w-28 lg:h-36 lg:w-36" style={{ color: '#b3838c' }} strokeWidth={0.9} />
           ) : null}
           <p className="font-serif text-lg font-semibold text-[#8c5a62]">{item.time}</p>
           <p className="font-sans text-xs tracking-wide text-[#a4767c]">{item.label}</p>
@@ -548,7 +548,7 @@ function App() {
             WebkitMaskImage: 'radial-gradient(circle at 75% 75%, black 55%, transparent 78%)'
           }}
         />
-        <div ref={timelineView.ref} className="relative mx-auto max-w-2xl text-center">
+        <div ref={timelineView.ref} className="relative mx-auto max-w-2xl text-center lg:max-w-4xl">
           <p
             className="script-title text-4xl md:text-5xl text-[#8c5a62] transition-all duration-700 ease-out"
             style={{ opacity: timelineView.inView ? 1 : 0, transform: `translateY(${timelineView.inView ? 0 : 16}px)` }}
@@ -576,7 +576,7 @@ function App() {
               className="pointer-events-none absolute left-5 top-2 bottom-2 w-px md:left-1/2 md:-translate-x-1/2"
               style={{ backgroundImage: 'linear-gradient(to bottom, #cf9aa6 50%, transparent 50%)', backgroundSize: '2px 10px', backgroundRepeat: 'repeat-y' }}
             />
-            <div className="flex flex-col gap-16 md:gap-12">
+            <div className="flex flex-col gap-16 md:gap-14 lg:gap-16">
               {timeline.map((item, index) => (
                 <TimelineItem key={item.time} item={item} index={index} />
               ))}
