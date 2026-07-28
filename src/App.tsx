@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import weddingBg from './assets/wedding-bg.jpg';
+import logo from './assets/LOGO.png';
 import bow from './assets/bow.png';
 import pattern from './assets/pattern.jpg';
 import venuePhoto from './assets/venue.png';
