@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { Cake } from 'lucide-react';
-
 import weddingBg from './assets/wedding-bg.jpg';
 import bow from './assets/bow.png';
 import pattern from './assets/pattern.jpg';
@@ -15,18 +13,13 @@ import sendOffImg from './assets/Send Off.png';
 const WEDDING_DATE = new Date('2026-09-19T19:30:00').getTime();
 const MAP_LINK = 'https://share.google/UfhC355pFwwVhutx4';
 
-type TimelineEntry = { time: string; label: string; image?: string; icon?: typeof Cake };
+type TimelineEntry = { time: string; label: string; image: string };
 
-// Every slot uses the real illustration you dropped into src/assets, except
-// Sweet Moments — no image was added for that one yet, so it falls back to a
-// plain line icon. Add a "Sweet Moments" image and swap it in the same way
-// as the others once it's there.
 const timeline: TimelineEntry[] = [
   { time: '7:30 PM', label: 'Guest Arrival', image: guestArrivalImg },
   { time: '8:00 PM', label: 'Grand Entry', image: grandEntryImg },
   { time: '8:15 PM', label: 'Photography', image: photographyImg },
   { time: '8:30 PM', label: 'Dinner', image: dinnerImg },
-  { time: '10:00 PM', label: 'Sweet Moments', icon: Cake },
   { time: '11:00 PM', label: 'Send-Off', image: sendOffImg }
 ];
 
@@ -248,8 +241,8 @@ function TimelineItem({ item, index }: { item: TimelineEntry; index: number }) {
   const isRight = index % 2 === 1;
 
   const motionClass = inView
-    ? 'opacity-100 translate-y-0 md:translate-x-0'
-    : `opacity-0 translate-y-6 md:translate-y-0 ${isRight ? 'md:translate-x-10' : 'md:-translate-x-10'}`;
+    ? 'opacity-100 translate-y-0 scale-100 md:translate-x-0'
+    : `opacity-0 translate-y-10 scale-95 md:translate-y-0 ${isRight ? 'md:translate-x-16' : 'md:-translate-x-16'}`;
 
   return (
     <div ref={ref} className="relative grid grid-cols-[2.5rem_1fr] items-center gap-x-4 md:grid-cols-[1fr_2.5rem_1fr] md:gap-x-10">
@@ -266,24 +259,20 @@ function TimelineItem({ item, index }: { item: TimelineEntry; index: number }) {
       </div>
 
       <div
-        className={`md:row-start-1 text-left transition-all duration-700 ease-out ${motionClass} ${
+        className={`md:row-start-1 text-left transition-all duration-[900ms] ease-out ${motionClass} ${
           isRight ? 'md:col-start-3 md:text-left' : 'md:col-start-1 md:text-right'
         }`}
       >
         <div className={`flex flex-col items-start gap-3 ${isRight ? 'md:items-start' : 'md:items-end'}`}>
-          {item.image ? (
-            <img
-              src={item.image}
-              alt=""
-              aria-hidden
-              loading="lazy"
-              className="max-h-32 max-w-32 md:max-h-56 md:max-w-56 lg:max-h-72 lg:max-w-72"
-            />
-          ) : item.icon ? (
-            <item.icon className="h-20 w-20 md:h-36 md:w-36 lg:h-48 lg:w-48" style={{ color: '#b3838c' }} strokeWidth={0.8} />
-          ) : null}
-          <p className="font-serif text-lg font-semibold text-[#8c5a62]">{item.time}</p>
-          <p className="font-sans text-xs tracking-wide text-[#a4767c]">{item.label}</p>
+          <img
+            src={item.image}
+            alt=""
+            aria-hidden
+            loading="lazy"
+            className="max-h-32 max-w-32 md:max-h-56 md:max-w-56 lg:max-h-72 lg:max-w-72"
+          />
+          <p className="font-serif text-2xl font-semibold text-[#8c5a62] md:text-3xl">{item.time}</p>
+          <p className="font-sans text-sm tracking-wide text-[#a4767c] md:text-base">{item.label}</p>
         </div>
       </div>
     </div>
@@ -538,13 +527,13 @@ function App() {
         <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #fdeef1 0%, #fbe7ec 45%, #f8f3ef 100%)' }} />
         <div ref={timelineView.ref} className="relative mx-auto max-w-2xl text-center lg:max-w-4xl">
           <p
-            className="script-title text-4xl md:text-5xl text-[#8c5a62] transition-all duration-700 ease-out"
+            className="script-title text-4xl md:text-5xl lg:text-6xl text-[#8c5a62] transition-all duration-700 ease-out"
             style={{ opacity: timelineView.inView ? 1 : 0, transform: `translateY(${timelineView.inView ? 0 : 16}px)` }}
           >
             Evening Timeline
           </p>
           <p
-            className="mt-2 font-serif text-base text-[#a4767c] transition-all duration-700 ease-out"
+            className="mt-2 font-serif text-base md:text-lg lg:text-xl text-[#a4767c] transition-all duration-700 ease-out"
             style={{
               opacity: timelineView.inView ? 1 : 0,
               transform: `translateY(${timelineView.inView ? 0 : 16}px)`,
