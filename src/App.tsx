@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Gift } from 'lucide-react';
-import weddingBg from './assets/wedding-bg.jpg';
-import logo from './assets/LOGO.png';
+import opening from './assets/Opening.jpg';
 import bow from './assets/bow.png';
 import pattern from './assets/pattern.jpg';
 import venuePhoto from './assets/venue.png';
@@ -36,13 +35,13 @@ const mix = (token: string, percent: number) => `color-mix(in oklch, var(--${tok
 const patternStyle = { backgroundImage: `url(${pattern})`, backgroundSize: '420px', backgroundRepeat: 'repeat' } as const;
 
 // Hero reveal choreography, in ms from the moment "Open Invitation" is pressed.
+// The invitation card itself (Opening.png) carries its own baked-in text, so
+// there's no separate text-stagger phase any more — just the bow untying,
+// then the zoom settling, then the scroll hint.
 const BOW_UNTIE_DURATION = 1900;
 const ZOOM_DELAY = 1700; // starts a little before the bow finishes, for a smooth handoff
 const ZOOM_DURATION = 3000;
-const TEXT_BASE_DELAY = ZOOM_DELAY + ZOOM_DURATION - 100;
-const TEXT_STAGGER = 400;
-const TEXT_DURATION = 600;
-const HINT_DELAY = TEXT_BASE_DELAY + 9 * TEXT_STAGGER + TEXT_DURATION + 300;
+const HINT_DELAY = ZOOM_DELAY + ZOOM_DURATION + 500;
 
 const HERO_MOTES = [
   { left: '10%', size: 4, duration: 15, delay: -2 },
@@ -131,109 +130,10 @@ function useHeroOpen() {
   return { mounted, opened, open: () => setOpened(true) };
 }
 
-/**
- * Fades a line up into place on its own staggered delay, once `opened` is
- * true. `dim` (0–1) sets that line's resting opacity once revealed — for
- * secondary lines that should read a touch quieter than the primary ones —
- * without fighting the 0/1 opacity the reveal itself animates.
- */
-function Reveal({
-  opened,
-  index,
-  dim = 1,
-  className,
-  children
-}: {
-  opened: boolean;
-  index: number;
-  dim?: number;
-  className?: string;
-  children: ReactNode;
-}) {
-  const delay = TEXT_BASE_DELAY + index * TEXT_STAGGER;
-  return (
-    <div
-      className={className}
-      style={{
-        opacity: opened ? dim : 0,
-        transform: `translateY(${opened ? 0 : 12}px)`,
-        transition: `opacity ${TEXT_DURATION}ms ease ${opened ? `${delay}ms` : '0ms'}, transform ${TEXT_DURATION}ms ease ${opened ? `${delay}ms` : '0ms'}`
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-// Deep rose ink on the pink scrim panel below it — the panel is what carries
-// the contrast, not the shadow, so this stays legible against sky, columns
-// or foliage alike. The halo shadow just softens the few edges that sit
-// outside the panel's blurred border.
+// Deep rose ink to match the invitation card's own rose-gold text, used for
+// the scroll hint that sits below the (fully baked-in) card image.
 const HERO_TEXT_COLOR = '#2c141c';
 const HERO_TEXT_SHADOW = '0 1px 14px rgba(255,240,244,0.9), 0 1px 2px rgba(255,240,244,0.7)';
-
-function HeroCopy({ opened }: { opened: boolean }) {
-  return (
-    <div className="pointer-events-auto max-w-md text-center px-6" style={{ color: HERO_TEXT_COLOR, textShadow: HERO_TEXT_SHADOW }}>
-      <Reveal opened={opened} index={0} dim={0.9} className="flex justify-center">
-        <span
-          className="flex h-16 w-16 items-center justify-center rounded-full"
-          style={{ border: '1px solid currentColor', opacity: 0.9 }}
-        >
-          <span
-            aria-hidden
-            style={{
-              width: 30,
-              height: 30,
-              backgroundColor: 'currentColor',
-              WebkitMaskImage: `url(${logo})`,
-              maskImage: `url(${logo})`,
-              WebkitMaskSize: 'contain',
-              maskSize: 'contain',
-              WebkitMaskRepeat: 'no-repeat',
-              maskRepeat: 'no-repeat',
-              WebkitMaskPosition: 'center',
-              maskPosition: 'center'
-            }}
-          />
-        </span>
-      </Reveal>
-      <Reveal opened={opened} index={1} className="script-title mt-5 text-4xl md:text-6xl leading-[1.15]">
-        Ayman &amp; Sahar
-      </Reveal>
-      <Reveal opened={opened} index={2} dim={0.88} className="mt-6 font-serif-sc font-semibold text-xs tracking-[0.2em] uppercase leading-relaxed">
-        We request the pleasure of your company
-      </Reveal>
-      <Reveal opened={opened} index={3} dim={0.88} className="font-serif-sc font-semibold text-xs tracking-[0.2em] uppercase leading-relaxed">
-        to celebrate our Nikah on
-      </Reveal>
-      <Reveal opened={opened} index={4} className="mt-6">
-        <div className="flex items-center justify-center gap-2 md:gap-3">
-          <span className="h-px w-5 md:w-6 opacity-60" style={{ backgroundColor: 'currentColor' }} />
-          <p className="font-serif-sc font-semibold tracking-[0.25em] uppercase text-[0.65rem] md:text-xs">September</p>
-          <p className="font-serif font-medium text-3xl md:text-4xl leading-none">19</p>
-          <p className="font-serif-sc font-semibold tracking-[0.25em] uppercase text-[0.65rem] md:text-xs">2026</p>
-          <span className="h-px w-5 md:w-6 opacity-60" style={{ backgroundColor: 'currentColor' }} />
-        </div>
-        <p className="mt-1 font-serif-sc font-semibold tracking-[0.25em] uppercase text-[0.65rem] md:text-xs" style={{ opacity: 0.85 }}>
-          Saturday
-        </p>
-      </Reveal>
-      <Reveal opened={opened} index={5} dim={0.9} className="mt-4 font-serif-sc font-semibold tracking-[0.3em] uppercase text-xs md:text-sm">
-        At Seven Thirty in the Evening
-      </Reveal>
-      <Reveal opened={opened} index={6} dim={0.9} className="mt-8 font-serif-sc font-semibold tracking-[0.35em] uppercase text-xs">
-        To be held at
-      </Reveal>
-      <Reveal opened={opened} index={7} className="script-title mt-2 text-3xl md:text-4xl">
-        North Avenue
-      </Reveal>
-      <Reveal opened={opened} index={8} dim={0.92} className="font-serif font-medium italic">
-        Event Space &amp; Banquet Hall
-      </Reveal>
-    </div>
-  );
-}
 
 function FamilyMember({ role, name }: { role: string; name: string }) {
   return (
@@ -310,35 +210,26 @@ function App() {
           className="absolute inset-0 transition-all duration-[1600ms] ease-out"
           style={{ opacity: hero.mounted ? 1 : 0, transform: hero.mounted ? 'scale(1)' : 'scale(1.05)' }}
         >
-          {/* PHASE 2 — camera pulls back from a tight crop on the arch crown to the full scene */}
+          {/* the invitation card itself — every line of text (names, date,
+              venue, time) is baked into this artwork, so it's rendered as a
+              real <img> with object-contain (never cover): a cover crop would
+              slice the top/bottom text off entirely on wide, short viewports,
+              since this is a tall portrait card. The alt text carries the
+              content for screen readers, since baked-in text isn't. */}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 flex items-center justify-center bg-[#fbe7ec]"
             style={{
-              transform: hero.opened ? 'scale(1)' : 'scale(1.32)',
-              transformOrigin: '50% 20%',
+              transform: hero.opened ? 'scale(1)' : 'scale(1.08)',
+              transformOrigin: '50% 30%',
               transition: `transform ${ZOOM_DURATION}ms cubic-bezier(.22,.61,.36,1) ${hero.opened ? `${ZOOM_DELAY}ms` : '0ms'}`
             }}
           >
-            {/* continuous ambient drift, independent of the deliberate zoom above */}
-            <div className="animate-hero-pan absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${weddingBg})` }} />
+            <img
+              src={opening}
+              alt="Ayman Sharieff and Syeda Sahar Farooq request the pleasure of your company to celebrate their wedding on Saturday, 19 September 2026 at North Avenue Event Space and Banquet Hall, seven thirty in the evening."
+              className="h-full w-full object-contain"
+            />
           </div>
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{ backgroundImage: `linear-gradient(to bottom, ${mix('background', 10)}, transparent, ${mix('background', 50)})` }}
-          />
-          {/* a soft pink/lavender wash tying the photo's blue sky and greenery into
-              the baby-pink theme, rather than leaving them their natural colors */}
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background: 'linear-gradient(165deg, rgba(255,205,222,0.4) 0%, rgba(255,231,238,0.18) 45%, rgba(214,176,196,0.32) 100%)',
-              mixBlendMode: 'soft-light'
-            }}
-          />
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{ background: 'radial-gradient(ellipse at center, transparent 55%, rgba(40,16,26,0.16) 100%)' }}
-          />
 
           {HERO_MOTES.map((mote, index) => (
             <span
@@ -355,31 +246,8 @@ function App() {
             />
           ))}
 
-          {/* a solid, near-uniform blush-pink panel behind the text block, so the
-              deep-rose text reads like ink on cardstock regardless of what's
-              directly behind it in the photo — pale sky at the top, shaded
-              columns/foliage lower down. A flat plateau with only the outer
-              margin softened, then blurred for a soft edge, holds contrast
-              evenly across the whole stack instead of a radial vignette that
-              fades before reaching the top lines. */}
           <div
-            className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-[900ms]"
-            style={{
-              opacity: hero.opened ? 1 : 0,
-              width: 'min(92vw, 30rem)',
-              height: 'min(92vh, 820px)',
-              background: 'linear-gradient(to bottom, transparent 0%, rgba(255,238,242,0.82) 10%, rgba(255,238,242,0.82) 90%, transparent 100%)',
-              filter: 'blur(28px)'
-            }}
-          />
-
-          {/* PHASE 3 — the ceremony text rises in, one line at a time */}
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-6">
-            <HeroCopy opened={hero.opened} />
-          </div>
-
-          <div
-            className="pointer-events-none absolute left-1/2 top-[46%] h-[58vw] max-h-[420px] w-[58vw] max-w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            className="pointer-events-none absolute left-1/2 top-[30%] h-[52vw] max-h-[380px] w-[52vw] max-w-[380px] -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={{ background: 'radial-gradient(circle, rgba(255,252,240,0.55) 0%, rgba(255,252,240,0) 70%)' }}
           />
 
@@ -387,7 +255,7 @@ function App() {
               Rendered as two clipped halves of the same artwork so each tail can
               exit independently, standing in for true fabric-tail physics. */}
           <div
-            className="pointer-events-none absolute left-1/2 top-[46%] w-[52vw] max-w-[420px] -translate-x-1/2 -translate-y-1/2"
+            className="pointer-events-none absolute left-1/2 top-[30%] w-[46vw] max-w-[360px] -translate-x-1/2 -translate-y-1/2"
             style={{ aspectRatio: '1 / 1', filter: 'drop-shadow(0 12px 24px rgba(60,60,40,0.15))' }}
           >
             <div
@@ -418,7 +286,7 @@ function App() {
             onClick={hero.open}
             disabled={hero.opened}
             aria-label="Open the wedding invitation"
-            className="absolute left-1/2 top-[73%]"
+            className="absolute bottom-24 left-1/2"
             style={{
               opacity: hero.opened ? 0 : hero.mounted ? 1 : 0,
               transform: `translateX(-50%) translateY(${hero.opened ? 12 : 0}px)`,
