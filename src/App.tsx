@@ -246,17 +246,27 @@ function App() {
             />
           ))}
 
+          {/* The card (Opening.jpg) is object-contain, so its rendered width
+              varies with viewport aspect ratio — full viewport width on tall
+              phones, much narrower (letterboxed) on wide/short screens like
+              laptops. Sizing the bow/glow off raw vw alone made them oversized
+              relative to the card on those wider screens; capping with a vh
+              term too keeps them proportional to the card either way. */}
           <div
-            className="pointer-events-none absolute left-1/2 top-[30%] h-[52vw] max-h-[380px] w-[52vw] max-w-[380px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(255,252,240,0.55) 0%, rgba(255,252,240,0) 70%)' }}
+            className="pointer-events-none absolute left-1/2 top-[30%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style={{
+              width: 'min(43vw, 20vh, 340px)',
+              height: 'min(43vw, 20vh, 340px)',
+              background: 'radial-gradient(circle, rgba(255,252,240,0.55) 0%, rgba(255,252,240,0) 70%)'
+            }}
           />
 
           {/* PHASE 1 — the bow: knot droops, then both tails sweep apart off-frame.
               Rendered as two clipped halves of the same artwork so each tail can
               exit independently, standing in for true fabric-tail physics. */}
           <div
-            className="pointer-events-none absolute left-1/2 top-[30%] w-[46vw] max-w-[360px] -translate-x-1/2 -translate-y-1/2"
-            style={{ aspectRatio: '1 / 1', filter: 'drop-shadow(0 12px 24px rgba(60,60,40,0.15))' }}
+            className="pointer-events-none absolute left-1/2 top-[30%] -translate-x-1/2 -translate-y-1/2"
+            style={{ width: 'min(38vw, 18vh, 300px)', aspectRatio: '1 / 1', filter: 'drop-shadow(0 12px 24px rgba(60,60,40,0.15))' }}
           >
             <div
               className={`absolute inset-0 ${!hero.opened ? 'animate-bow-idle-half' : ''}`}
