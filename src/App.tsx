@@ -6,7 +6,6 @@ import bow from './assets/bow.png';
 import pattern from './assets/pattern.jpg';
 import venuePhoto from './assets/venue.png';
 import valance from './assets/valance.png';
-import urn from './assets/urn.png';
 import guestArrivalImg from './assets/Guest arrival.png';
 import grandEntryImg from './assets/Wedding.png';
 import photographyImg from './assets/Photos.png';
@@ -278,10 +277,10 @@ function TimelineItem({ item, index }: { item: TimelineEntry; index: number }) {
               alt=""
               aria-hidden
               loading="lazy"
-              className="max-h-24 max-w-24 md:max-h-40 md:max-w-40 lg:max-h-52 lg:max-w-52"
+              className="max-h-32 max-w-32 md:max-h-56 md:max-w-56 lg:max-h-72 lg:max-w-72"
             />
           ) : item.icon ? (
-            <item.icon className="h-16 w-16 md:h-28 md:w-28 lg:h-36 lg:w-36" style={{ color: '#b3838c' }} strokeWidth={0.9} />
+            <item.icon className="h-20 w-20 md:h-36 md:w-36 lg:h-48 lg:w-48" style={{ color: '#b3838c' }} strokeWidth={0.8} />
           ) : null}
           <p className="font-serif text-lg font-semibold text-[#8c5a62]">{item.time}</p>
           <p className="font-sans text-xs tracking-wide text-[#a4767c]">{item.label}</p>
@@ -537,17 +536,6 @@ function App() {
 
       <section className="relative overflow-hidden py-24 px-6">
         <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #fdeef1 0%, #fbe7ec 45%, #f8f3ef 100%)' }} />
-        <div
-          className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 md:h-96 md:w-96 opacity-90"
-          style={{
-            backgroundImage: `url(${urn})`,
-            backgroundSize: '160%',
-            backgroundPosition: '38% 20%',
-            backgroundRepeat: 'no-repeat',
-            maskImage: 'radial-gradient(circle at 75% 75%, black 55%, transparent 78%)',
-            WebkitMaskImage: 'radial-gradient(circle at 75% 75%, black 55%, transparent 78%)'
-          }}
-        />
         <div ref={timelineView.ref} className="relative mx-auto max-w-2xl text-center lg:max-w-4xl">
           <p
             className="script-title text-4xl md:text-5xl text-[#8c5a62] transition-all duration-700 ease-out"
@@ -576,7 +564,7 @@ function App() {
               className="pointer-events-none absolute left-5 top-2 bottom-2 w-px md:left-1/2 md:-translate-x-1/2"
               style={{ backgroundImage: 'linear-gradient(to bottom, #cf9aa6 50%, transparent 50%)', backgroundSize: '2px 10px', backgroundRepeat: 'repeat-y' }}
             />
-            <div className="flex flex-col gap-16 md:gap-14 lg:gap-16">
+            <div className="flex flex-col gap-16 md:gap-20 lg:gap-24">
               {timeline.map((item, index) => (
                 <TimelineItem key={item.time} item={item} index={index} />
               ))}
