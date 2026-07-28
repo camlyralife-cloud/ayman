@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { Gift } from 'lucide-react';
 import weddingBg from './assets/wedding-bg.jpg';
 import logo from './assets/LOGO.png';
 import bow from './assets/bow.png';
@@ -244,10 +245,9 @@ function FamilyMember({ role, name }: { role: string; name: string }) {
 }
 
 /**
- * One stop on the evening timeline. Desktop alternates left/right of a
- * central line, like a proper wedding-day journey; mobile collapses to a
- * single line on the left with every item reading the same way, keeping the
- * same visual hierarchy. Each item watches its own visibility, so they
+ * One stop on the evening timeline, alternating left/right of a central
+ * line like a proper wedding-day journey — the same layout at every screen
+ * size, just scaled down. Each item watches its own visibility, so they
  * reveal one at a time as the guest scrolls past, not all at once.
  */
 function TimelineItem({ item, index }: { item: TimelineEntry; index: number }) {
@@ -257,12 +257,12 @@ function TimelineItem({ item, index }: { item: TimelineEntry; index: number }) {
   const isRight = index % 2 === 1;
 
   const motionClass = inView
-    ? 'opacity-100 translate-y-0 scale-100 md:translate-x-0'
-    : `opacity-0 translate-y-10 scale-95 md:translate-y-0 ${isRight ? 'md:translate-x-16' : 'md:-translate-x-16'}`;
+    ? 'opacity-100 translate-y-0 scale-100 translate-x-0'
+    : `opacity-0 scale-95 ${isRight ? 'translate-x-10 md:translate-x-16' : '-translate-x-10 md:-translate-x-16'}`;
 
   return (
-    <div ref={ref} className="relative grid grid-cols-[2.5rem_1fr] items-center gap-x-4 md:grid-cols-[1fr_2.5rem_1fr] md:gap-x-6">
-      <div className="relative flex justify-center md:col-start-2 md:row-start-1">
+    <div ref={ref} className="relative grid grid-cols-[1fr_2rem_1fr] items-center gap-x-2 sm:grid-cols-[1fr_2.5rem_1fr] sm:gap-x-6">
+      <div className="relative col-start-2 row-start-1 flex justify-center">
         <span
           className="h-3 w-3 rounded-full border-2 transition-transform duration-500 ease-out"
           style={{
@@ -275,20 +275,20 @@ function TimelineItem({ item, index }: { item: TimelineEntry; index: number }) {
       </div>
 
       <div
-        className={`md:row-start-1 text-left transition-all duration-[900ms] ease-out ${motionClass} ${
-          isRight ? 'md:col-start-3 md:text-left' : 'md:col-start-1 md:text-right'
+        className={`row-start-1 transition-all duration-[900ms] ease-out ${motionClass} ${
+          isRight ? 'col-start-3 text-left' : 'col-start-1 text-right'
         }`}
       >
-        <div className={`flex flex-col items-start gap-3 ${isRight ? 'md:items-start' : 'md:items-end'}`}>
+        <div className={`flex flex-col items-center gap-2 sm:gap-3 ${isRight ? 'items-start' : 'items-end'}`}>
           <img
             src={item.image}
             alt=""
             aria-hidden
             loading="lazy"
-            className="max-h-32 max-w-32 md:max-h-56 md:max-w-56 lg:max-h-72 lg:max-w-72"
+            className="max-h-16 max-w-16 sm:max-h-32 sm:max-w-32 md:max-h-56 md:max-w-56 lg:max-h-72 lg:max-w-72"
           />
-          <p className="font-serif text-2xl font-semibold text-[#8c5a62] md:text-3xl">{item.time}</p>
-          <p className="font-sans text-sm tracking-wide text-[#a4767c] md:text-base">{item.label}</p>
+          <p className="font-serif text-base font-semibold text-[#8c5a62] sm:text-2xl md:text-3xl">{item.time}</p>
+          <p className="font-sans text-[0.65rem] tracking-wide text-[#a4767c] sm:text-sm md:text-base">{item.label}</p>
         </div>
       </div>
     </div>
@@ -560,13 +560,12 @@ function App() {
           </p>
 
           {/* a beautiful wedding-day journey the guest scrolls through — the
-              central line runs continuously top to bottom; on desktop each
-              stop alternates left/right of it, on mobile it collapses to a
-              single line on the left with every stop reading the same way */}
+              central line runs continuously top to bottom, with each stop
+              alternating left/right of it, the same way at every screen size */}
           <div className="relative mt-10">
             <div
               aria-hidden
-              className="pointer-events-none absolute left-5 top-2 bottom-2 w-px md:left-1/2 md:-translate-x-1/2"
+              className="pointer-events-none absolute left-1/2 top-2 bottom-2 w-px -translate-x-1/2"
               style={{ backgroundImage: 'linear-gradient(to bottom, #cf9aa6 50%, transparent 50%)', backgroundSize: '2px 10px', backgroundRepeat: 'repeat-y' }}
             />
             <div className="flex flex-col gap-8 md:gap-10">
@@ -575,6 +574,20 @@ function App() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden py-20 px-6">
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #f8f3ef 0%, #fbe7ec 50%, #fdeef1 100%)' }} />
+        <div className="relative mx-auto max-w-md text-center">
+          <Gift className="mx-auto h-9 w-9" style={{ color: '#b3838c' }} strokeWidth={1.2} />
+          <p className="script-title mt-4 text-4xl md:text-5xl text-[#8c5a62]">Wedding Gifts</p>
+          <p className="mt-5 font-sans text-xs tracking-[0.15em] text-[#a4767c] md:text-sm">
+            YOUR PRESENCE IS THE GREATEST GIFT WE COULD ASK FOR
+          </p>
+          <p className="mt-4 font-serif italic text-lg text-[#8c5a62] md:text-xl">Be part of our happily ever after</p>
+          <div className="mx-auto mt-8 h-px w-16" style={{ backgroundColor: '#cf9aa6' }} />
+          <p className="script-title mt-8 text-3xl text-[#8c5a62] md:text-4xl">Ayman &amp; Sahar</p>
         </div>
       </section>
 
