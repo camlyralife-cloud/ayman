@@ -176,10 +176,25 @@ function HeroCopy({ opened }: { opened: boolean }) {
     <div className="pointer-events-auto max-w-md text-center px-6" style={{ color: HERO_TEXT_COLOR, textShadow: HERO_TEXT_SHADOW }}>
       <Reveal opened={opened} index={0} dim={0.9} className="flex justify-center">
         <span
-          className="flex h-14 w-14 items-center justify-center rounded-full font-serif-sc text-sm tracking-[0.15em]"
+          className="flex h-16 w-16 items-center justify-center rounded-full"
           style={{ border: '1px solid currentColor', opacity: 0.9 }}
         >
-          A&amp;S
+          <span
+            aria-hidden
+            style={{
+              width: 30,
+              height: 30,
+              backgroundColor: 'currentColor',
+              WebkitMaskImage: `url(${logo})`,
+              maskImage: `url(${logo})`,
+              WebkitMaskSize: 'contain',
+              maskSize: 'contain',
+              WebkitMaskRepeat: 'no-repeat',
+              maskRepeat: 'no-repeat',
+              WebkitMaskPosition: 'center',
+              maskPosition: 'center'
+            }}
+          />
         </span>
       </Reveal>
       <Reveal opened={opened} index={1} className="script-title mt-5 text-4xl md:text-6xl leading-[1.15]">
